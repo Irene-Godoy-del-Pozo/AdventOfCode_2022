@@ -36,4 +36,5 @@ int main()
     //Puzzle7("input7_test.txt");
 
     Puzzle8("input8.txt");
+    //Puzzle8("input8_test.txt");
 }

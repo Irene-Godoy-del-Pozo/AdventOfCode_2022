@@ -19,6 +19,7 @@ class Puzzle8 {
 
 	int visibleTrees = 0;
 
+	int hightscenic = 0;
 
 public:
 	Puzzle8(string);
@@ -27,6 +28,7 @@ public:
 private:
 
 	void GetVisibleTrees();
+	void GetHighestScenic();
 
 	void PrintTrees();
 
