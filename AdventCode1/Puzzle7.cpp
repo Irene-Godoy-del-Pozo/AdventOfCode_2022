@@ -14,55 +14,33 @@
 Puzzle7::Puzzle7(string _file)
 {
 
+	//Fill the list input with de data given
+
 	ifstream file(_file.c_str());
 
 	string linea;
 
-	/*firstDirectory.insert(pair<string,Elements>( "/", first));
-	string name;*/
 	while (getline(file, linea))
 	{
 	
-		//if (linea.compare(0, 4, "$ cd") == 0)
-		//	name = linea.substr(5, linea.back());
-		//else if (linea == "$ ls")
-		//{
-		//	list < string >aux;
-		//	getline(file, linea);
-		//	while (linea[0] != '$')
-		//	{
-		//		aux.push_back(linea);
-		//		getline(file, linea);
-		//	}
-		//	//firstDirectory["/"].elements = FillList(aux);
-		//	if(name == "/")
-		//		firstDirectory["/"].elements = FillList(aux);
-		//	else
-		//		FindDirectory(firstDirectory["/"].elements,"dir "+name).elements = FillList(aux);
-
-		//	if (linea != "$ cd ..") 
-		//		name = linea.substr(5, linea.back());
-		//}
-
 		input.push_back(linea);
-
 	}
 
 	it_input = input.begin();
-	Elements first;
-	_main.elements.insert(pair<string, Elements>("/", first));
-	totalsize = 0;
+
+	
 	CreateList(_main);
 	
-	int aa = GetSizes(_main);
-	totalsize = 0;
+	AssignSizes(_main);
+
 	Print(_main, "");
 	cout <<"First question: "<< totalsize << endl;
 
-	unused_space = 70000000 - _main.elements["/"].size;
-	min_space = 30000000 - unused_space;
-	erase_dir = 70000000;
-	int directory = GetErasedDirectory(_main);
+	int unused_space = TOTAL_DISK_SPACE - _main.elements["/"].size;
+	min_space = MIN_UNUSED_SPACE - unused_space;
+	erase_dir = TOTAL_DISK_SPACE;
+
+	GetErasedDirectory(_main);
 
 	cout << "Second question: " << erase_dir << endl;
 
@@ -71,6 +49,8 @@ Puzzle7::Puzzle7(string _file)
 Puzzle7::~Puzzle7()
 {
 }
+
+
 
 map<string, Puzzle7::Elements> Puzzle7::FillList(list<string> _list)
 {
@@ -88,13 +68,10 @@ map<string, Puzzle7::Elements> Puzzle7::FillList(list<string> _list)
 		{
 			string a = it->substr(0, it->find(' '));
 			elm.size = stoi(a);
-//			name = it->substr(it->find(' ') + 1, it->back());
+
 
 		}
-		else
-		{
-			elm.size = 0;
-		}
+	
 		
 		name = it->substr(it->find(' ') + 1, it->back());
 		aux.insert(pair<string, Elements>(name,elm));
@@ -107,40 +84,6 @@ map<string, Puzzle7::Elements> Puzzle7::FillList(list<string> _list)
 	return aux;
 }
 
-Puzzle7::Elements & Puzzle7::FindDirectory(map<string, Elements>& elm, string name)
-{
-	//if (name == "/") return elm[name];
-
-	Elements* aux = &_empty;
-
-	if (elm.count(name) == 1) 
-		return elm[name];
-
-	else
-	{
-		map<string, Elements>::iterator it = elm.begin();
-
-		for (it; it != elm.end(); it++)
-		{
-			if (it->second.elements.size() != 0)
-			{
-				aux = &FindDirectory(it->second.elements, name);
-				if (aux->size != _empty.size) 
-					return *aux;
-			}
-		}
-
-		
-
-	}
-
-
-
-	map<string, Elements>& a = elm;//firstDirectory.find(name)->second;
-	
-	return *aux;
-}
-
 
 
 
@@ -150,28 +93,25 @@ Puzzle7::Elements & Puzzle7::FindDirectory(map<string, Elements>& elm, string na
 
 void Puzzle7::CreateList(Elements& elm)
 {
-	string aux = *it_input;
+	
 	string child;
 	list<string> elemntsdirectory;
 	Elements* child_elemnts = &elm;
 
 	for (it_input; it_input != input.end(); it_input++)
 	{
-		if (*it_input == "$ cd ..")
+		if (*it_input == "$ cd ..") //get back one level
 			return;
-		else if (it_input->compare(0, 4, "$ cd") == 0)
+		else if (it_input->compare(0, 4, "$ cd") == 0) //Get in one level in {child} directory
 		{
 			child = it_input->substr(5, it_input->back());
+
 			it_input++;
-			if (child == "jqlm")
-			{
-				it_input++;
-				it_input--;
-			}
+
 			CreateList(elm.elements[child]);
-			//child_elemnts = &elm.elements[child].elements;
+
 		}
-		else if (*it_input == "$ ls")
+		else if (*it_input == "$ ls") //fill the directory's map 
 		{
 			it_input++;
 			while ((it_input != input.end()) && (it_input->at(0) != '$') )
@@ -181,7 +121,8 @@ void Puzzle7::CreateList(Elements& elm)
 			} 
 			
 			child_elemnts->elements = FillList(elemntsdirectory);
-			if (it_input != input.end()) it_input--;
+
+			if (it_input != input.end()) it_input--; //get back to the previous input line to be able to read it
 			
 
 		}
@@ -203,6 +144,7 @@ void Puzzle7::Print(Elements elm,string espace)
 			cout <<espace + it->first << endl;
 			cout << espace+"tamaño dir: "<< it->second.size << endl;
 			Print(it->second, espace + "  ");
+
 			if(it->second.size <= 100000)
 				totalsize += it->second.size;
 		}
@@ -216,7 +158,7 @@ void Puzzle7::Print(Elements elm,string espace)
 	
 }
 
-int Puzzle7::GetSizes(Elements& elm)
+int Puzzle7::AssignSizes(Elements& elm)
 {
 	string aux;
 	map<string, Elements>::iterator it = elm.elements.begin();
@@ -224,22 +166,13 @@ int Puzzle7::GetSizes(Elements& elm)
 
 	for (it; it != elm.elements.end(); it++)
 	{
-		
-
+		//If it's a directory 
 		if (it->second.elements.size() != 0)
-		{
-			
-			it->second.size = GetSizes(it->second);
-			_size += it->second.size;
-			
-		}
-		else
-		{
-			_size += it->second.size;
-			//if (it->second.size <= 100000) totalsize += it->second.size;
-
+		{			
+			it->second.size = AssignSizes(it->second);			
 		}
 
+		_size += it->second.size;
 	}
 	
 
@@ -258,6 +191,8 @@ int Puzzle7::GetErasedDirectory(Elements elm)
 		{
 			
 			GetErasedDirectory(it->second);
+
+
 			if (it->second.size >= min_space && it->second.size <= erase_dir)
 				erase_dir = it->second.size;
 		}
