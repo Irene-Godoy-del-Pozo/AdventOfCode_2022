@@ -9,6 +9,11 @@
 #include "Puzzle5.h"
 #include "Puzzle6.h"
 #include "Puzzle7.h"
+#include "Puzzle8.h"
+
+
+
+
 
 int main()
 {
@@ -27,6 +32,8 @@ int main()
 
    // Puzzle6("input6.txt");
 
-    Puzzle7("input7.txt");
+    //Puzzle7("input7.txt");
     //Puzzle7("input7_test.txt");
+
+    Puzzle8("input8.txt");
 }

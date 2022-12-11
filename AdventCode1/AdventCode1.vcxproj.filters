@@ -39,6 +39,9 @@
     <ClCompile Include="Puzzle7.cpp">
       <Filter>Archivos de origen</Filter>
     </ClCompile>
+    <ClCompile Include="Puzzle8.cpp">
+      <Filter>Archivos de origen</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Puzzle1.h">
@@ -60,6 +63,9 @@
       <Filter>Archivos de encabezado</Filter>
     </ClInclude>
     <ClInclude Include="Puzzle7.h">
+      <Filter>Archivos de encabezado</Filter>
+    </ClInclude>
+    <ClInclude Include="Puzzle8.h">
       <Filter>Archivos de encabezado</Filter>
     </ClInclude>
   </ItemGroup>
