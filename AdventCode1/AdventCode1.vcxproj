@@ -141,6 +141,8 @@
   <ItemGroup>
     <ClCompile Include="AdventCode1.cpp" />
     <ClCompile Include="Puzzle1.cpp" />
+    <ClCompile Include="Puzzle10.cpp" />
+    <ClCompile Include="Puzzle11.cpp" />
     <ClCompile Include="Puzzle2.cpp" />
     <ClCompile Include="Puzzle3.cpp" />
     <ClCompile Include="Puzzle4.cpp" />
@@ -152,6 +154,8 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Puzzle1.h" />
+    <ClInclude Include="Puzzle10.h" />
+    <ClInclude Include="Puzzle11.h" />
     <ClInclude Include="Puzzle2.h" />
     <ClInclude Include="Puzzle3.h" />
     <ClInclude Include="Puzzle4.h" />
